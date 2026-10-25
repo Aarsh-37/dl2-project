@@ -1,0 +1,302 @@
+name,alias_of,category
+Python,,language
+JavaScript,,language
+JS,JavaScript,language
+TypeScript,,language
+TS,TypeScript,language
+Java,,language
+C,,language
+C++,,language
+C#,,language
+Go,,language
+Golang,Go,language
+Rust,,language
+Ruby,,language
+PHP,,language
+Swift,,language
+Kotlin,,language
+Dart,,language
+Scala,,language
+R,,language
+MATLAB,,language
+Perl,,language
+Haskell,,language
+Elixir,,language
+Julia,,language
+SQL,,language
+HTML,,language
+HTML5,HTML,language
+CSS,,language
+CSS3,CSS,language
+Bash,,language
+Shell,Bash,language
+PowerShell,,language
+React,,frontend
+React.js,React,frontend
+Angular,,frontend
+Vue.js,,frontend
+Vue,Vue.js,frontend
+Next.js,,frontend
+NextJS,Next.js,frontend
+Nuxt.js,,frontend
+Svelte,,frontend
+Redux,,frontend
+Zustand,,frontend
+Tailwind CSS,,frontend
+Tailwind,Tailwind CSS,frontend
+Bootstrap,,frontend
+Material UI,,frontend
+MUI,Material UI,frontend
+shadcn/ui,,frontend
+Sass,,frontend
+SCSS,Sass,frontend
+Less,,frontend
+Webpack,,frontend
+Vite,,frontend
+Babel,,frontend
+ESLint,,frontend
+Prettier,,frontend
+jQuery,,frontend
+D3.js,,frontend
+Three.js,,frontend
+Framer Motion,,frontend
+Styled Components,,frontend
+Axios,,frontend
+Storybook,,frontend
+Enzyme,,frontend
+Node.js,,backend
+Node,Node.js,backend
+Express.js,,backend
+Express,Express.js,backend
+FastAPI,,backend
+Django,,backend
+Flask,,backend
+Spring Boot,,backend
+Spring,Spring Boot,backend
+ASP.NET,,backend
+.NET,ASP.NET,backend
+Laravel,,backend
+Ruby on Rails,,backend
+Rails,Ruby on Rails,backend
+NestJS,,backend
+GraphQL,,backend
+REST API,,backend
+REST,REST API,backend
+gRPC,,backend
+WebSockets,,backend
+WebSocket,WebSockets,backend
+Microservices,,backend
+Serverless,,backend
+tRPC,,backend
+Prisma,,backend
+Mongoose,,backend
+SQLAlchemy,,backend
+Celery,,backend
+RabbitMQ,,backend
+Kafka,,backend
+Socket.io,,backend
+BullMQ,,backend
+TypeORM,,backend
+Sequelize,,backend
+Drizzle,,backend
+PostgreSQL,,database
+Postgres,PostgreSQL,database
+MySQL,,database
+MongoDB,,database
+Mongo,MongoDB,database
+SQLite,,database
+Redis,,database
+Cassandra,,database
+DynamoDB,,database
+Firestore,,database
+Supabase,,database
+Elasticsearch,,database
+Elastic,Elasticsearch,database
+Neo4j,,database
+MariaDB,,database
+Oracle DB,,database
+Oracle,Oracle DB,database
+SQL Server,,database
+MSSQL,SQL Server,database
+Snowflake,,database
+BigQuery,,database
+Redshift,,database
+Pinecone,,database
+Qdrant,,database
+ChromaDB,,database
+pgvector,,database
+Docker,,devops
+Kubernetes,,devops
+K8s,Kubernetes,devops
+Terraform,,devops
+Ansible,,devops
+Jenkins,,devops
+GitHub Actions,,devops
+GitLab CI,,devops
+CircleCI,,devops
+CI/CD,,devops
+CICD,CI/CD,devops
+Nginx,,devops
+Apache,,devops
+Linux,,devops
+Ubuntu,Linux,devops
+Prometheus,,devops
+Grafana,,devops
+ELK Stack,,devops
+Datadog,,devops
+Docker Compose,,tools
+AWS,,cloud
+Azure,,cloud
+GCP,,cloud
+Google Cloud,GCP,cloud
+Vercel,,cloud
+Netlify,,cloud
+Render,,cloud
+Railway,,cloud
+Heroku,,cloud
+DigitalOcean,,cloud
+Cloudflare,,cloud
+S3,,cloud
+EC2,,cloud
+Lambda,,cloud
+IAM,,cloud
+CloudWatch,,cloud
+ECR,,cloud
+ECS,,cloud
+Fargate,,cloud
+RDS,,cloud
+CloudFormation,,cloud
+SQS,,cloud
+SNS,,cloud
+Pandas,,data
+NumPy,,data
+Airflow,,data
+Spark,,data
+PySpark,Spark,data
+Hadoop,,data
+ETL,,data
+Power BI,,data
+PowerBI,Power BI,data
+Tableau,,data
+Excel,,data
+Matplotlib,,data
+Seaborn,,data
+Plotly,,data
+Jupyter,,data
+dbt,,data
+Airbyte,,data
+Fivetran,,data
+Scikit-learn,,ml
+sklearn,Scikit-learn,ml
+TensorFlow,,ml
+PyTorch,,ml
+Keras,,ml
+OpenCV,,ml
+NLTK,,ml
+spaCy,,ml
+Hugging Face,,ml
+Transformers,Hugging Face,ml
+LangChain,,ml
+LangGraph,,ml
+LlamaIndex,,ml
+CrewAI,,ml
+MLflow,,ml
+Deep Learning,,ml
+NLP,,ml
+Computer Vision,,ml
+RAG,,ml
+Prompt Engineering,,ml
+Fine-tuning,,ml
+Statistics,,data
+Stable Diffusion,,ml
+Whisper,,ml
+YOLO,,ml
+XGBoost,,ml
+LightGBM,,ml
+Android,,mobile
+iOS,,mobile
+React Native,,mobile
+Flutter,,mobile
+SwiftUI,,mobile
+Jetpack Compose,,mobile
+Ionic,,mobile
+Xamarin,,mobile
+Cordova,,mobile
+Firebase,,mobile
+Expo,,mobile
+Fastlane,,mobile
+Jest,,testing
+Pytest,,testing
+pytest,Pytest,testing
+JUnit,,testing
+Selenium,,testing
+Cypress,,testing
+Playwright,,testing
+Vitest,,testing
+Mocha,,testing
+Postman,,testing
+JMeter,,testing
+TestNG,,testing
+Mockito,,testing
+React Testing Library,,testing
+RTL,React Testing Library,testing
+k6,,testing
+Gatling,,testing
+Git,,tools
+GitHub,,tools
+GitLab,,tools
+Bitbucket,,tools
+Jira,,tools
+Confluence,,tools
+Slack,,tools
+VS Code,,tools
+VSCode,VS Code,tools
+IntelliJ,,tools
+Eclipse,,tools
+Figma,,tools
+Adobe XD,,tools
+Agile,,tools
+Scrum,,tools
+Kanban,,tools
+OAuth,,tools
+JWT,,tools
+SAML,,tools
+Stripe,,tools
+Twilio,,tools
+Auth0,,tools
+Keycloak,,tools
+WebRTC,,tools
+Notion,,tools
+Trello,,tools
+Linear,,tools
+Asana,,tools
+Miro,,tools
+YAML,,tools
+JSON,,tools
+XML,,tools
+OWASP,,security
+Penetration Testing,,security
+Pentesting,Penetration Testing,security
+Burp Suite,,security
+Metasploit,,security
+Wireshark,,security
+Nmap,,security
+Cryptography,,security
+SIEM,,security
+Zero Trust,,security
+Nessus,,security
+Kali Linux,,security
+Data Structures,,fundamentals
+Algorithms,,fundamentals
+OOP,,fundamentals
+Object-Oriented Programming,OOP,fundamentals
+DBMS,,fundamentals
+Operating Systems,,fundamentals
+OS,Operating Systems,fundamentals
+Computer Networks,,fundamentals
+System Design,,fundamentals
+Distributed Systems,,fundamentals
+Design Patterns,,fundamentals
+SOLID Principles,,fundamentals
+SvelteKit,Svelte,frontend
+Bun,,backend

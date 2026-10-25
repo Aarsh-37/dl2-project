@@ -1,0 +1,27 @@
+
+> careerpilot-frontend@0.1.0 dev
+> next dev -p 3001
+
+   ▲ Next.js 15.5.27
+   - Local:        http://localhost:3001
+   - Network:      http://172.18.208.1:3001
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.8s
+ ○ Compiling / ...
+ ✓ Compiled / in 965ms (700 modules)
+ GET / 200 in 1475ms
+ ○ Compiling /analyze ...
+ ✓ Compiled /analyze in 791ms (755 modules)
+ GET /analyze 200 in 1287ms
+ ○ Compiling /results/[jobId] ...
+ ✓ Compiled /results/[jobId] in 1074ms (806 modules)
+ GET /results/38d4d5ad-46c9-4a11-a36c-43f8ab02a8bb 200 in 2427ms
+ ○ Compiling /history ...
+ ✓ Compiled /history in 583ms (813 modules)
+ GET /history 200 in 803ms
+ GET /analyze 200 in 48ms
+ GET /history 200 in 30ms
+ GET /analyze 200 in 34ms
+ GET /results/1cc65bfa-eccc-46c5-b128-8d1b47c0b762 200 in 52ms

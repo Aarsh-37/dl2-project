@@ -1,0 +1,3 @@
+skill,category,difficulty,q,ideal_answer,key_points
+Docker,technical,Medium,Explain multi-stage builds and why they shrink images.,"Build in one stage, copy only artifacts to a slim runtime stage.","Stages|Image size|Security"
+General,hr,Easy,Tell me about yourself.,"Present role (1 line), proof with a metric (2 lines), why this role (1 line).","Present|Proof|Fit"

@@ -1,0 +1,10 @@
+skill,title,url_documentation,url_youtube
+TypeScript,TypeScript Handbook,https://www.typescriptlang.org/docs/handbook/intro.html,https://www.youtube.com/results?search_query=TypeScript+full+course
+Node.js,Node.js Learn,https://nodejs.org/en/learn,https://www.youtube.com/results?search_query=Node.js+full+course+Piyush+Garg
+Next.js,Next.js Learn,https://nextjs.org/learn,https://www.youtube.com/results?search_query=Next.js+full+course+JavaScript+Mastery
+FastAPI,FastAPI Tutorial,https://fastapi.tiangolo.com/tutorial/,https://www.youtube.com/results?search_query=FastAPI+full+course
+PostgreSQL,PostgreSQL Tutorial,https://www.postgresql.org/docs/current/tutorial.html,https://www.youtube.com/results?search_query=PostgreSQL+full+course
+Kubernetes,Kubernetes Basics,https://kubernetes.io/docs/tutorials/kubernetes-basics/,https://www.youtube.com/results?search_query=Kubernetes+full+course+TechWorld+with+Nana
+AWS,AWS Skill Builder,https://skillbuilder.aws/,https://www.youtube.com/results?search_query=AWS+full+course+freeCodeCamp
+TensorFlow,TensorFlow Tutorials,https://www.tensorflow.org/tutorials,https://www.youtube.com/results?search_query=TensorFlow+full+course+freeCodeCamp
+Git,Pro Git Book,https://git-scm.com/book/en/v2,https://www.youtube.com/results?search_query=Git+GitHub+full+course

@@ -1,0 +1,21 @@
+pair_id,resume_ref,jd_ref,human_ats,human_verdict,expected_missing,notes
+pair01,data/samples/resume_01_backend_fresher.md,data/samples/jd_01_backend_intern.md,64,Moderate,Docker|AWS,suggested — human must confirm before use
+pair02,data/samples/resume_02_frontend.md,data/samples/jd_02_frontend.md,74,Moderate,TypeScript|Jest,suggested — human must confirm before use
+pair03,data/samples/resume_03_data_fresher.md,data/samples/jd_03_data_analyst.md,58,Moderate,Power BI|Statistics,suggested — human must confirm before use
+pair04,,,,,add a strong-match pair (expected Strong ≥75)
+pair05,,,,,add a weak-match pair (expected <50)
+pair06,,,,,add a cross-domain pair (e.g. frontend resume vs backend JD)
+pair07,,,,,add a scanned-PDF resume (OCR path)
+pair08,,,,,add a 2+ year experienced resume
+pair09,,,,,add a non-tech role JD (e.g. marketing)
+pair10,,,,,add resume with tables/graphics (formatting penalty case)
+pair11,,,,,team to add
+pair12,,,,,team to add
+pair13,,,,,team to add
+pair14,,,,,team to add
+pair15,,,,,team to add
+pair16,,,,,team to add
+pair17,,,,,team to add
+pair18,,,,,team to add
+pair19,,,,,team to add
+pair20,,,,,team to add
