@@ -14,14 +14,46 @@ GITHUB = re.compile(r"(?:https?://)?(?:www\.)?github\.com/([A-Za-z0-9_.-]+)", re
 LINKEDIN = re.compile(r"(?:https?://)?(?:www\.)?linkedin\.com/in/([A-Za-z0-9_.-]+/?)", re.I)
 
 SECTION_KEYWORDS: dict[str, tuple[str, ...]] = {
+    "summary": ("professional summary", "career summary", "summary", "profile",
+                "objective", "about me"),
     "education": ("education", "academic", "qualification"),
     "experience": ("experience", "employment", "work history", "internship", "work experience"),
     "projects": ("project",),
-    "skills": ("skill", "tech stack", "technologies", "technical"),
-    "certifications": ("certification", "certificate", "license", "licence"),
+    "skills": ("skill", "tech stack", "technologies", "technical",
+               "competency", "competencies"),
+    "certifications": ("certification", "certificate", "license", "licence",
+                       "award", "awards", "honor", "honors"),
     "activities": ("co-curricular", "extracurricular", "activities", "activity",
                    "achievements", "accomplishments", "leadership", "interests", "hobbies"),
 }
+
+# Words that may surround a section keyword without changing its meaning
+# ("Awards and Certifications", "Technical Skills Summary", "Key Projects").
+_HEADING_FILLER = {
+    "and", "&", "of", "the", "a", "an", "in", "for", "my", "work", "professional",
+    "personal", "technical", "core", "key", "relevant", "other", "additional",
+    "summary", "profile", "objective", "overview", "about", "me", "main",
+}
+_KW_TOKENS = {
+    token
+    for keywords in SECTION_KEYWORDS.values()
+    for keyword in keywords
+    for token in re.split(r"[^a-z]+", keyword)
+    if token
+}
+
+
+def _heading_section(lowered: str) -> str | None:
+    """Pick the section whose keyword appears furthest right (most specific)."""
+    best: tuple[int, int, str] | None = None
+    for section, keywords in SECTION_KEYWORDS.items():
+        for keyword in keywords:
+            idx = lowered.rfind(keyword)
+            if idx >= 0:
+                candidate = (idx, len(keyword), section)
+                if best is None or candidate[:2] > best[:2]:
+                    best = candidate
+    return best[2] if best else None
 
 _BULLET = re.compile(r"^(\s*[-*•>]|\s*\d+[.)])\s+")
 
@@ -42,19 +74,41 @@ def extract_contact(text: str) -> dict:
 
 
 def _is_heading(line: str) -> str | None:
-    stripped = line.strip().rstrip(":")
+    stripped = line.strip().rstrip(":").strip()
     if not stripped or len(stripped) > 45 or _BULLET.match(line):
+        return None
+    # Metadata continuations from PDF wrapping ("| Certificate", "(Remote)")
+    # are body text, never section headings.
+    if stripped.startswith(("|", "\u2022", "\u00b7", "\u2013", "\u2014", "(")):
         return None
     if not re.search(r"[A-Za-z]", stripped):
         return None
     lowered = stripped.lower()
-    for section, keywords in SECTION_KEYWORDS.items():
-        if any(kw in lowered for kw in keywords):
-            if stripped.isupper() or stripped.istitle() or line.strip().endswith(":") \
-                    or lowered in keywords or any(lowered == kw or lowered.startswith(kw + " ")
-                                                 for kw in keywords):
-                return section
-    return None
+    section = _heading_section(lowered)
+    if section is None:
+        return None
+    if stripped.isupper() or line.strip().endswith(":"):
+        return section
+    # A real heading is made of section words/filler only. This keeps
+    # "Academic Projects" a heading while "Data Engineering Virtual
+    # Internship" (a certificate name) stays in its current section.
+    tokens = re.findall(r"[a-z]+", lowered)
+    if not tokens or len(tokens) > 7:
+        return None
+    for token in tokens:
+        if token in _HEADING_FILLER or token in _KW_TOKENS:
+            continue
+        if any(len(token) >= 4 and len(kw) >= 4
+               and (token.startswith(kw) or kw.startswith(token))
+               for kw in _KW_TOKENS):
+            continue
+        return None
+    return section
+
+
+def is_heading(line: str) -> str | None:
+    """Public heading check (section name or None) for sibling exporters."""
+    return _is_heading(line)
 
 
 def split_sections(text: str) -> dict[str, list[str]]:

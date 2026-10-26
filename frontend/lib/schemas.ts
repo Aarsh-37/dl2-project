@@ -96,7 +96,7 @@ export const agentTraceSchema = z.object({
   provider: z.string(),
   model: z.string(),
   latency_ms: z.number(),
-  mode: z.enum(["live", "error", "disabled"]),
+  mode: z.enum(["live", "cache", "skip", "error", "disabled"]),
   detail: z.string().optional(),
 });
 export type AgentTrace = z.infer<typeof agentTraceSchema>;

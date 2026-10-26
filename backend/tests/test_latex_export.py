@@ -46,7 +46,7 @@ def test_latex_escape_and_order():
     tex = lx.build_latex(data)
     assert r"\documentclass[a4paper,10pt]{article}" in tex
     assert "janedoe" in tex and "jane@example.com" in tex
-    order = ["Summary", "Education", "Experience", "Projects",
+    order = ["Professional Summary", "Education", "Experience", "Projects",
              "Skills Summary", "Certifications", "Co-Curricular Activities"]
     positions = [tex.index(t) for t in order]
     assert positions == sorted(positions), "section order violated"

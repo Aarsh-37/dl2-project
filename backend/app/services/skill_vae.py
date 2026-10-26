@@ -1,23 +1,4 @@
 """Skill VAE recommender — deep learning inside CareerPilot AI.
-
-Syllabus map:
-- Unit V: Variational Autoencoder (neural + graphical-model view). A
-  candidate's skill set is a high-dimensional observation; the encoder
-  compresses it to a low-dimensional latent "profile" (Unit II: latent
-  variables), the decoder reconstructs P(skill | profile). Skills with high
-  reconstructed probability that the candidate LACKS are suggestions:
-  "people with your stack usually also know X".
-- Unit III (RBMs): the conceptual predecessor — same idea (learn P(data)
-  over binary vectors via latent factors), superseded here by the VAE +
-  transformer embeddings used for semantic match.
-- Unit IV (MCMC/Gibbs/CD): how energy-based models like RBMs are trained.
-  VAEs train instead by maximizing the ELBO with the reparameterization
-  trick (see train_vae) — no sampling loop needed at inference.
-
-Honest scope: this is a small prior model over skill co-occurrence, NOT a
-replacement for gap analysis. Suggestions are labeled experimental, never
-override deterministic gaps, and the pipeline works identically with the
-model file absent (suggest_skills -> []).
 """
 from __future__ import annotations
 

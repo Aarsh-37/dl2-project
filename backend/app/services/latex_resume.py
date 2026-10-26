@@ -25,8 +25,8 @@ _LATEX_SPECIALS = {"\\": r"\textbackslash{}", "&": r"\&", "%": r"\%",
                    "{": r"\{", "}": r"\}", "~": r"\textasciitilde{}",
                    "^": r"\textasciicircum{}"}
 
-_UNICODE_FIX = {"\u2010": "-", "\u2011": "-", "\u2012": "-", "\u2013": "-",
-                "\u2014": "--", "\u2018": "'", "\u2019": "'",
+_UNICODE_FIX = {"\u2010": "-", "\u2011": "-", "\u2012": "-", "\u2013": "--",
+                "\u2014": "---", "\u2018": "'", "\u2019": "'",
                 "\u201c": '"', "\u201d": '"', "\u2026": "...",
                 "\u00a0": " ", "\u2022": "-", "\u2192": "->", "\u2713": "v"}
 
@@ -65,9 +65,13 @@ def _contact_line(contact: dict) -> str:
     if phone:
         bits.append(escape(phone))
     if li:
-        bits.append(_link(f"https://{li}", f"LinkedIn: {li.split('/')[-1]}"))
+        bits.append(_link(f"https://{li}", "LinkedIn"))
+    elif contact.get("linkedin_label"):
+        bits.append(escape(contact["linkedin_label"]))
     if gh:
-        bits.append(_link(f"https://{gh}", f"GitHub: {gh}"))
+        bits.append(_link(f"https://{gh}", "GitHub"))
+    elif contact.get("github_label"):
+        bits.append(escape(contact["github_label"]))
     return (" $|$ ".join(bits) or escape("Contact details in original resume"))
 
 
@@ -75,8 +79,14 @@ def _bullets(lines: list[str]) -> str:
     items = "\n".join(f"\\resumeItemWithoutTitle{{{escape(l)}}}" for l in lines if l.strip())
     if not items:
         return ""
-    return ("\\resumeSubHeadingListStart\n" + items +
-            "\n\\resumeSubHeadingListEnd\n\\vspace{-5pt}\n")
+    return ("\\resumeBulletListStart\n" + items +
+            "\n\\resumeBulletListEnd\n\\vspace{-5pt}\n")
+
+
+# CGPA/GPA labels, bare percentages, and "8.7/10" style scores.
+_SCORE = re.compile(
+    r"^\s*(?:(?:cgpa|gpa|percentage|score)\b.*|(?:\d+(?:\.\d+)?\s*%)|"
+    r"(?:\d+(?:\.\d+)?\s*/\s*\d+(?:\.\d+)?))\s*$", re.I)
 
 
 _PREAMBLE = r"""\documentclass[a4paper,10pt]{article}
@@ -111,6 +121,9 @@ _PREAMBLE = r"""\documentclass[a4paper,10pt]{article}
     #1 \vspace{-2pt}
   }
 }
+\newcommand{\resumeDetailLine}[1]{
+  \item[]\small{\textit{#1} \vspace{-2pt}}
+}
 \newcommand{\resumeSubheading}[4]{
   \vspace{-1pt}\item
     \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
@@ -119,11 +132,23 @@ _PREAMBLE = r"""\documentclass[a4paper,10pt]{article}
     \end{tabular*}\vspace{-5pt}
 }
 \newcommand{\resumeSubItem}[2]{\resumeItem{#1}{#2}\vspace{-3pt}}
-\renewcommand{\labelitemii}{$\circ$}
+\newcommand{\resumeProjectHeading}[2]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+    \end{tabular*}\vspace{-6pt}
+}
+\renewcommand{\labelitemi}{}
+\renewcommand{\labelitemii}{--}
+\renewcommand{\labelitemiii}{$\circ$}
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 \newcommand{\resumeItemListStart}{\begin{itemize}}
 \newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\newcommand{\resumeBulletListStart}{\begin{itemize}[leftmargin=*, label=--]}
+\newcommand{\resumeBulletListEnd}{\end{itemize}\vspace{-5pt}}
+\newcommand{\resumeSkillListStart}{\begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt, parsep=0pt]}
+\newcommand{\resumeSkillListEnd}{\end{itemize}}
 \begin{document}
 """
 
@@ -148,26 +173,43 @@ def _prioritize_entries(entries: list[dict], required: list[str]) -> list[dict]:
         return list(entries)
 
     def text(entry: dict) -> str:
-        return " ".join([entry.get("title", ""), entry.get("link", "")]
+        return " ".join([entry.get("title", ""), entry.get("link", ""),
+                         entry.get("date", "")] + entry.get("details", [])
                         + entry.get("bullets", []))
 
     return sorted(entries, key=lambda e: not _mentions_required(text(e), required))
 
 
 def _entry_tex(entries: list[dict], required: list[str], cap: int) -> str:
+    """Entry heading with a right-aligned date, then its bullets.
+
+    Title/date share one row (like the reference templates); bullets are a
+    nested list so PDF wrap artefacts never leak into the layout.
+    """
     out = ["\\resumeSubHeadingListStart\n"]
     for entry in _prioritize_entries(entries, required)[:cap]:
         title = escape(entry.get("title", ""))
         link = entry.get("link", "")
-        link_tex = (" \\textit{%s}" % escape(link)) if link else ""
+        if link:
+            title += " $|$ \\emph{%s}" % escape(link)
+        date = escape(entry.get("date", ""))
+        details = " | ".join(escape(d) for d in entry.get("details", [])
+                             if (d or "").strip())
         bullets = [b for b in entry.get("bullets", []) if (b or "").strip()][:5]
         if bullets:
-            out.append("\\item\\small{\\textbf{%s}%s}\n" % (title, link_tex))
+            out.append("\\resumeProjectHeading{%s}{%s}\n" % (title, date))
             out.append("\\resumeItemListStart\n")
+            if details:
+                out.append("\\resumeDetailLine{%s}\n" % details)
             out.extend("\\resumeItemWithoutTitle{%s}\n" % escape(b) for b in bullets)
             out.append("\\resumeItemListEnd\n")
+        elif details:
+            out.append("\\resumeSubheading{%s}{%s}{%s}{}\n" % (title, date, details))
+        elif date:
+            out.append("\\resumeItemWithoutTitle{\\textbf{%s} \\hfill %s}\n"
+                       % (title, date))
         else:
-            out.append("\\resumeItemWithoutTitle{\\textbf{%s}%s}\n" % (title, link_tex))
+            out.append("\\resumeItemWithoutTitle{\\textbf{%s}}\n" % title)
     out.append("\\resumeSubHeadingListEnd\n\\vspace{-2pt}\n")
     return "".join(out)
 
@@ -176,17 +218,25 @@ def _education_tex(entries: list[dict], cap: int = 6) -> str:
     out = ["\\resumeSubHeadingListStart\n"]
     for entry in entries[:cap]:
         title = escape(entry.get("title", ""))
-        details = " | ".join(escape(d) for d in entry.get("details", []) if (d or "").strip())
+        date = escape(entry.get("date", ""))
+        details = [escape(d) for d in entry.get("details", []) if (d or "").strip()]
+        right = ""
+        if details and _SCORE.match(_ascii(details[-1])):
+            right = details.pop()
         if details:
-            out.append("\\item\\small{\\textbf{%s}\\\\%s}\n" % (title, details))
+            out.append("\\resumeSubheading{%s}{%s}{%s}{%s}\n"
+                       % (title, date, " | ".join(details), right))
+        elif right:
+            out.append("\\resumeSubheading{%s}{%s}{}{%s}\n"
+                       % (title, date, right))
         else:
-            out.append("\\resumeItemWithoutTitle{\\textbf{%s}}\n" % title)
+            out.append("\\resumeProjectHeading{%s}{%s}\n" % (title, date))
     out.append("\\resumeSubHeadingListEnd\n\\vspace{-2pt}\n")
     return "".join(out)
 
 
 def _skills_tex(groups: list[dict], matched: set[str]) -> str:
-    out = ["\\resumeSubHeadingListStart\n"]
+    out = ["\\resumeSkillListStart\n"]
     for group in groups:
         label = ("\\textbf{%s:} " % escape(group["label"])) if group.get("label") else ""
         items = []
@@ -196,7 +246,7 @@ def _skills_tex(groups: list[dict], matched: set[str]) -> str:
                 esc = "\\textbf{%s}" % esc
             items.append(esc)
         out.append("\\item\\small{%s%s}\n" % (label, ", ".join(items)))
-    out.append("\\resumeSubHeadingListEnd\n\\vspace{-2pt}\n")
+    out.append("\\resumeSkillListEnd\n\\vspace{-2pt}\n")
     return "".join(out)
 
 
@@ -218,21 +268,25 @@ def build_latex(data: dict, max_bullets: int = 6) -> str:
 
     parts = [_PREAMBLE]
     name = escape(data.get("name", "Candidate"))
-    parts.append("\\begin{center}\n"
-                 "{\\LARGE \\textbf{" + name + "}}\\\\\n"
-                 + _contact_line(contact) + "\n"
-                 "\\end{center}\n\\vspace{-8pt}\n")
+    title = escape((data.get("title") or "").strip())
+    header_tex = "\\begin{center}\n" \
+                 "{\\LARGE \\textsc{" + name + "}}\\\\\n"
+    if title:
+        header_tex += "{\\large \\textsc{" + title + "}}\\\\\n"
+    header_tex += _contact_line(contact) + "\n\\end{center}\n\\vspace{-8pt}\n"
+    parts.append(header_tex)
     if summary:
-        parts.append("\\section{Summary}\n" + escape(summary) + "\n\\vspace{-2pt}\n")
+        parts.append("\\section{Professional Summary}\n" + escape(summary)
+                     + "\n\\vspace{-2pt}\n")
+
+    def _items(key: str) -> tuple[list, bool]:
+        value = sections.get(key)
+        if isinstance(value, list) and (value or key in sections):
+            return value, bool(value and isinstance(value[0], dict))
+        value = blocks.get(key) or []
+        return list(value), bool(value and isinstance(value[0], dict))
 
     if blocks or sections:
-        def _items(key: str) -> tuple[list, bool]:
-            value = sections.get(key)
-            if isinstance(value, list) and (value or key in sections):
-                return value, bool(value and isinstance(value[0], dict))
-            value = blocks.get(key) or []
-            return list(value), bool(value and isinstance(value[0], dict))
-
         edu, edu_struct = _items("education")
         if edu:
             if edu_struct:
@@ -270,8 +324,21 @@ def build_latex(data: dict, max_bullets: int = 6) -> str:
                      "\\resumeSubHeadingListEnd\n\\vspace{-2pt}\n")
     for key, title in (("certifications", "Certifications"),
                        ("activities", "Co-Curricular Activities")):
-        lines = prioritize_lines(sections.get(key, []) or [], required)[:max_bullets]
-        if lines:
+        entries, structured = _items(key)
+        if not entries:
+            continue
+        if key == "activities":
+            lines = ([b for e in entries for b in e.get("bullets", [])]
+                     if structured else list(entries))
+            lines = [l for l in lines if (l or "").strip()][:max_bullets]
+            if lines:
+                parts.append(f"\\section{{{title}}}\n{_bullets(lines)}\\vspace{{-2pt}}\n")
+            continue
+        if structured:
+            parts.append(f"\\section{{{title}}}\n"
+                         + _entry_tex(entries, required, max_bullets) + "\n")
+        else:
+            lines = prioritize_lines(entries, required)[:max_bullets]
             parts.append(f"\\section{{{title}}}\n{_bullets(lines)}\\vspace{{-2pt}}\n")
     parts.append("\\end{document}\n")
     return "".join(parts)
